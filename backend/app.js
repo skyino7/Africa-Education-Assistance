@@ -8,16 +8,13 @@ const adminRoutes = require('./routes/admin');
 const protectedRoutes = require('./routes/protectedRoutes');
 
 const app = express();
-app.use(cors({ credentials: true, origin: 'http://localhost:3001' }));
+app.use(cors({ credentials: true,
+    origin: 'http://localhost:3001' }
+));
+
 app.use(express.json());
 
 // Connect to MongoDB
 dbConnect();
-
-// Routes
-app.use('/auth', authRoutes);
-app.use('/admin', adminRoutes);
-app.use('/client', clientRoutes);
-app.use('/protected', protectedRoutes);
 
 module.exports = app;
