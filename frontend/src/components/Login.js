@@ -2,32 +2,39 @@ import React, { useState } from 'react';
 
 const Login = () => {
     const [formData, setFormData] = useState({
-        username: '',
+        email: '',
         password: '',
     });
 
-    const { username, password } = formData;
+    const [error, setError] = useState(null);
+
+    const { email, password } = formData;
 
     const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setError(null);
+
         try {
-            const res = await fetch('/api/auth/login', {
+            const res = await fetch('http://localhost:5000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
             });
-            const data = await res.json();
-            if (res.ok) {
-                console.log('Login successful:', data);
-            } else {
-                console.error('Login Failed:', data);
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Login failed');
             }
+
+            const data = await res.json();
+            console.log('Login successful:', data);
         } catch (error) {
             console.error('Request error:', error);
+            setError(error.message);
         }
     };
 
@@ -37,12 +44,12 @@ const Login = () => {
                 <h1 className="text-2xl font-bold text-center">Login</h1>
                 <form className="space-y-6" onSubmit={onSubmit}>
                     <div className="flex flex-col space-y-1">
-                        <label htmlFor="username" className="text-sm font-semibold text-gray-600">Username</label>
+                        <label htmlFor="email" className="text-sm font-semibold text-gray-600">Email Address</label>
                         <input
-                            type="text"
-                            name="username"
-                            id="username"
-                            value={username}
+                            type="email"
+                            name="email"
+                            id="email"
+                            value={email}
                             onChange={onChange}
                             className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
                             required
@@ -63,7 +70,8 @@ const Login = () => {
                     <button type="submit" className="w-full px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                         Login
                     </button>
-                    <div className='flex flex-col space-y-1'>
+                    {error && <p className="text-red-500 text-center">{error}</p>}
+                    <div className="flex flex-col space-y-1">
                         <p>Don't have an account?
                             <a className="px-2 py-2 hover:underline text-indigo-500 focus:outline-none" href="/">Sign up</a>
                         </p>
