@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
         enum: ['admin', 'user'],
         default: 'user'
     }
-});
+}, {timestamps: true});
 
 userSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
@@ -40,10 +40,10 @@ userSchema.pre('save', async function(next) {
     } catch (err) {
         next(err);
     }
-})
+});
 
 userSchema.methods.comparePassword = async function(Password) {
-    return bcrypt.compare(password, this.password);
+    return bcrypt.compare(Password, this.password);
 };
 
 const User = mongoose.model('User', userSchema);
