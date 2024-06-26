@@ -118,7 +118,13 @@ const Login = () => {
                 throw new Error(errorData.message || 'Login failed');
             }
 
-            // const data = await res.json();
+            const data = await res.json();
+            if (res.ok){
+                console.log('Login Successful', data);
+            } else {
+                console.log('Login Failed', data)
+            }
+
             navigate('/dashboard');
         } catch (error) {
             console.error('Request error:', error);
