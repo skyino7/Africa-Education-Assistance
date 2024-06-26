@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/Users");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+
 
 const Register = async (req, res) => {
     try {
@@ -15,7 +16,7 @@ const Register = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        const hashedPassword = bcrypt.hashSync(password, 10);
+        const hashedPassword = password;
 
         const newUser = new UserModel({
             username,
@@ -25,7 +26,8 @@ const Register = async (req, res) => {
             password: hashedPassword
         });
 
-        await newUser.save();
+        const data = await newUser.save();
+        console.log(data);
         res.status(201).json({ message: "User Created Successfully", newUser });
 
     } catch (err) {
@@ -34,32 +36,45 @@ const Register = async (req, res) => {
     }
 }
 
-const Login = async(req, res) => {
-
+const Login = async (req, res) => {
     try {
-
         const { email, password } = req.body;
+        console.log(`Received email: ${email}, password: ${password}`);
+
+        if (!email || !password) {
+            console.log('Email or password not provided');
+            return res.status(400).json({ success: false, message: "Email and Password are required" });
+        }
 
         const existingUser = await UserModel.findOne({ email });
+        console.log(`Provided email: ${existingUser.email}`);
+        console.log(`Fetched user: ${existingUser}`);
+
         if (!existingUser) {
-            return res.status(404).json({ success: false, message: "User Not Found"});
+            console.log('User not found');
+            return res.status(404).json({ success: false, message: "User Not Found" });
         }
 
-        const isMatch = await bcrypt.compare(password, existingUser.password);
+        const isMatch = await existingUser.comparePassword(password);
+        console.log(`Password match result: ${isMatch}`);
+        console.log(`Hashed password in DB: ${existingUser.password}`);
+        console.log(`Plain text password: ${password}`);
+
         if (!isMatch) {
+            console.log('Password does not match');
             return res.status(401).json({ success: false, message: "Incorrect password" });
         }
-        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET);
+
+        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log(`Generated token: ${token}`);
 
         res.cookie("token", token, { httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 });
 
-        res.status(200).json({ success: true, message: "Login Successfully", existingUser, token})
-
+        res.status(200).json({ success: true, message: "Login Successfully", existingUser, token });
     } catch (err) {
+        console.log('Error in login process:', err);
         res.status(500).json({ success: false, message: "Internal Server Error" });
-        console.log(err);
     }
-
 }
 
 const CheckUser = async (req, res) => {
