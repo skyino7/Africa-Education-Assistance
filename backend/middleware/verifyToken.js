@@ -56,13 +56,17 @@ const IsUser = async (req, res, next) => {
 
         const authHeader = req.headers.authorization;
         const token = authHeader.split(' ')[1];
+        console.log("Token: ", token);
 
         if (!token) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await UserModel.findById(decoded.userId);
+        console.log("Decoded: ", decoded);
+        const user = await UserModel.findById(decoded.id);
+        console.log("User: ", user);
+
         if (!user) {
             return res.status(401).json({ message: 'User Not Found' });
         }
