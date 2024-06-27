@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const AuthRoutes = require('./routes/AuthRoutes');
 const AdminRoutes = require('./routes/AdminRoutes');
 const BookCampaignRoutes = require('./routes/BookCampaignRoutes');
+const DonateBookRoutes = require('./routes/DonateBookRoutes');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(cors({ credentials: true,
 app.use('/api/auth', AuthRoutes);
 app.use('/api/admin', AdminRoutes);
 app.use('/api/campaign', BookCampaignRoutes);
+app.use('/api/donatebook', DonateBookRoutes);
 
 app.get('/api', (req, res) => {
     res.send('Hello, World!');
