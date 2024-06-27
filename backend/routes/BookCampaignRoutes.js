@@ -1,5 +1,5 @@
 const express = require('express');
-const { IsUser } = require('../middleware/verifyToken');
+const { IsUser, IsAdmin } = require('../middleware/verifyToken');
 const verifyOwner = require('../middleware/verifyOwner');
 const uploadMiddleware = require('../middleware/upload');
 
@@ -14,7 +14,7 @@ const {
 } = require('../controllers/BookCampaign');
 
 
-BookCampaignRoutes.post('/create', IsUser, uploadMiddleware, createBookCampaign);
+BookCampaignRoutes.post('/create', IsAdmin, IsUser, uploadMiddleware, createBookCampaign);
 BookCampaignRoutes.get('/getbookcampaigns', getBookCampaigns);
 BookCampaignRoutes.get('/getbookcampaigns/:id', getBookCampaignById);
 BookCampaignRoutes.put('/update/bookcampaigns/:id', verifyOwner, updateBookCampaign);

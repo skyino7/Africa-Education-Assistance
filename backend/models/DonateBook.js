@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 const donateBookSchema = new mongoose.Schema({
     bookId: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        default: function() {
+            return `BOOK-${Math.floor(100000 + Math.random() * 900000)}`;
+        }
     },
     userId: {
         type: String,
@@ -31,7 +35,6 @@ const donateBookSchema = new mongoose.Schema({
     },
     picture: {
         type: String,
-        required: true
     }
 });
 

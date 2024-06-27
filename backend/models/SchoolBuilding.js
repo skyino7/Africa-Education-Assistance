@@ -25,14 +25,6 @@ const schoolBuildingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    latitude: {
-        type: Number,
-        required: false
-    },
-    longitude: {
-        type: Number,
-        required: false
-    },
     AmountNeeded: {
         type: Number,
         required: true
