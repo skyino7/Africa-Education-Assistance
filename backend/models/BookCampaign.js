@@ -19,7 +19,6 @@ const bookCampaignSchema = new mongoose.Schema({
     },
     picture: {
         type: String,
-        required: true
     },
     received: {
         type: Boolean,
