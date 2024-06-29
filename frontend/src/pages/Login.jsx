@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { setUser } from '../redux/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
+
 const Login = () => {
 
-    const user = useSelector((state) => state.Auth?.user);
-    console.log("Use Selector: ", user);
+    const user = useSelector((state) => state.Auth);
+    // console.log("Use Selector: ", user);
+
+    // const { user } = useSelector((state) => {
+    //     console.log(state);
+    //     return state.auth}
+    // );
 
     const dispatch = useDispatch();
 
@@ -42,44 +48,31 @@ const Login = () => {
             }
 
             const data = await res.json();
-            console.log("Logged In Details: ",data);
+            // console.log("Logged In Details: ",data);
 
-            if (data && data.data && data.data.user) {
-                console.log('Login Successful', data);
+            if (data && data.existingUser) {
+                // console.log('Login Successful', data);
 
                 toast.success('Login Successful', {
                     position: 'top-center',
                 });
-                dispatch(setUser(data.data.user));
+                dispatch(setUser(data.existingUser));
 
-                if (data.data.user.role === 'admin') {
+                if (data.existingUser.role === 'admin') {
                     navigate('/admin');
-                } else if (data.data.user.role === 'user') {
+                    toast.success('Admin Page', {
+                        position: 'top-center',
+                    });
+                } else if (data.existingUser.role === 'user') {
                     navigate('/user');
+                    toast.success('User Page', {
+                        position: 'top-center',
+                    });
                 }
             } else {
                 console.log('Invalid response structure:', data);
                 throw new Error('Invalid response structure');
             }
-
-
-
-            // if (data && data.user) {
-            //     console.log('Login Successful', data);
-            //     if (data.user.role === 'admin') {
-            //         navigate('/admin');
-            //     } else if (data.user.role === 'user') {
-            //         navigate('/user');
-            //     }
-
-            //     toast.success('Login Successful', {
-            //         position: 'top-center',
-            //     });
-            //     dispatch(setUser(data.user));
-            // } else {
-            //     console.log('Invalid response structure:', data);
-            //     throw new Error('Invalid response structure');
-            // }
 
         } catch (error) {
             console.log('Request error:', error);
@@ -87,11 +80,16 @@ const Login = () => {
         }
     };
 
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+        }
+    }, [user, navigate]);
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-3 bg-white rounded shadow-md">
                 <h1 className="text-2xl font-bold text-center">Login</h1>
-                {error && <p className="text-red-500 text-center">{error}</p>}
                 <form className="space-y-6" onSubmit={onSubmit}>
                     <div className="flex flex-col space-y-1">
                         <label htmlFor="email" className="text-sm font-semibold text-gray-600">Email Address</label>
@@ -120,6 +118,7 @@ const Login = () => {
                     <button type="submit" className="w-full px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                         Login
                     </button>
+                    {error && <p className="text-red-500 text-center">{error}</p>}
                     <div className="flex flex-col space-y-1">
                         <p>Don't have an account?
                             <a className="px-2 py-2 hover:underline text-indigo-500 focus:outline-none" href="/register">Sign up</a>
