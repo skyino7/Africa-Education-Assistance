@@ -29,10 +29,22 @@ const schoolBuildingSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    AmountRaised:{
+        type: Number
+    },
     verified: {
         type: Boolean,
         default: false
     },
+    // image: {
+    //     type: File,
+    //     required: true
+    // },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
 
 const SchoolBuilding = mongoose.model('SchoolBuilding', schoolBuildingSchema);

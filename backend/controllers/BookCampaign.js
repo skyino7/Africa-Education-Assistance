@@ -47,11 +47,24 @@ module.exports = createBookCampaign;
 const getBookCampaigns = async (req, res) => {
 
     try {
-        const bookCampaigns = await BookCampaign.find();
-        res.status(200).json(bookCampaigns);
+        const { page = 1, limit = 10 } = req.query;
+        const bookCampaigns = await BookCampaign.find()
+        .populate('userId', 'firstName')
+        .skip((page - 1) * limit)
+        .limit(Number(limit))
+        .exec();
+
+        const total = await BookCampaign.countDocuments();
+        res.status(200).json({
+            success: true,
+            data: bookCampaigns,
+            totalPages: Math.ceil(total / limit),
+            currentPage: Number(page)
+        });
+
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: 'Internal server error' })
+        res.status(500).json({ success: false, message: 'Internal server error' })
     }
 }
 

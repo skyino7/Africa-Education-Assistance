@@ -24,12 +24,12 @@ const IsAdmin = async (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Decoded Token:', decoded);
+        // console.log('Decoded Token:', decoded);
 
         const user = await UserModel.findById(decoded.id);
 
         // Log fetched user for debugging
-        console.log('Fetched User:', user);
+        // console.log('Fetched User:', user);
 
         if (!user) {
             return res.status(401).json({ message: 'User Not Found' });
@@ -54,18 +54,27 @@ const IsUser = async (req, res, next) => {
     try{
         // const token = req.cookies.token;
 
-        const authHeader = req.headers.authorization;
-        const token = authHeader.split(' ')[1];
-        console.log("Token: ", token);
+        // console.log("Headers: ", req.headers.cookie);
+        // console.log("Headers: ", req.headers);
+
+        const authHeader = req.headers['authorization'];
+        // console.log("Auth Header isUser: ", authHeader);
+        let token = authHeader && authHeader.split(' ')[1];
+
+        if (!token) {
+            token = req.cookies.token; // Get token from cookie if not in the header
+          }
+
+        console.log("Token isUser: ", token);
 
         if (!token) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("Decoded: ", decoded);
+        // console.log("Decoded: ", decoded);
         const user = await UserModel.findById(decoded.id);
-        console.log("User: ", user);
+        // console.log("User: ", user);
 
         if (!user) {
             return res.status(401).json({ message: 'User Not Found' });

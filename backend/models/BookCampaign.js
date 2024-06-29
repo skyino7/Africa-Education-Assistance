@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const bookCampaignSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',  // Reference to User model
         required: true
     },
     name: {
