@@ -67,7 +67,7 @@ const Login = async (req, res) => {
         }
 
         const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log(`Generated token: ${token}`);
+        // console.log(`Generated token: ${token}`);
 
         res.cookie("token", token, { httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 });
 
@@ -76,6 +76,7 @@ const Login = async (req, res) => {
             email: existingUser.email,
             role: existingUser.role
         }});
+
     } catch (err) {
         console.log('Error in login process:', err);
         res.status(500).json({ success: false, message: "Internal Server Error" });

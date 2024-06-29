@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 const UserLayouts = () => {
     const navigate = useNavigate();
 
-    const { user } = useSelector((state) => state.Auth.user);
+    const { user } = useSelector((state) => state.auth);
+
     useEffect(() => {
         if (!user) {
             navigate("/login");

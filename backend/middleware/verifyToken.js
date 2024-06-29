@@ -65,7 +65,7 @@ const IsUser = async (req, res, next) => {
             token = req.cookies.token; // Get token from cookie if not in the header
           }
 
-        console.log("Token isUser: ", token);
+        // console.log("Token isUser: ", token);
 
         if (!token) {
             return res.status(401).json({ message: 'Unauthorized' });
