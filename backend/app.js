@@ -7,6 +7,8 @@ const AuthRoutes = require('./routes/AuthRoutes');
 const AdminRoutes = require('./routes/AdminRoutes');
 const BookCampaignRoutes = require('./routes/BookCampaignRoutes');
 const DonateBookRoutes = require('./routes/DonateBookRoutes');
+const SchoolBuildingRoutes = require('./routes/SchoolBuildingRoutes');
+const VerifyPaymentRoutes = require('./routes/VerifyPaymentRoutes');
 
 const app = express();
 
@@ -26,6 +28,8 @@ app.use('/api/auth', AuthRoutes);
 app.use('/api/admin', AdminRoutes);
 app.use('/api/campaign', BookCampaignRoutes);
 app.use('/api/donatebook', DonateBookRoutes);
+app.use('/api/school-building', SchoolBuildingRoutes);
+app.use('/api/paystack', VerifyPaymentRoutes);
 
 app.get('/api', (req, res) => {
     res.send('Hello, World!');

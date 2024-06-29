@@ -28,7 +28,7 @@ const Register = async (req, res) => {
         });
 
         const data = await newUser.save();
-        console.log(data);
+        // console.log(data);
         res.status(201).json({ message: "User Created Successfully", newUser });
 
     } catch (err) {
@@ -40,7 +40,7 @@ const Register = async (req, res) => {
 const Login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(`Received email: ${email}, password: ${password}`);
+        // console.log(`Received email: ${email}, password: ${password}`);
 
         if (!email || !password) {
             console.log('Email or password not provided');
@@ -48,8 +48,8 @@ const Login = async (req, res) => {
         }
 
         const existingUser = await UserModel.findOne({ email });
-        console.log(`Provided email: ${existingUser.email}`);
-        console.log(`Fetched user: ${existingUser}`);
+        // console.log(`Provided email: ${existingUser.email}`);
+        // console.log(`Fetched user: ${existingUser}`);
 
         if (!existingUser) {
             console.log('User not found');
@@ -57,9 +57,9 @@ const Login = async (req, res) => {
         }
 
         const isMatch = await existingUser.comparePassword(password);
-        console.log(`Password match result: ${isMatch}`);
-        console.log(`Hashed password in DB: ${existingUser.password}`);
-        console.log(`Plain text password: ${password}`);
+        // console.log(`Password match result: ${isMatch}`);
+        // console.log(`Hashed password in DB: ${existingUser.password}`);
+        // console.log(`Plain text password: ${password}`);
 
         if (!isMatch) {
             console.log('Password does not match');
@@ -71,7 +71,11 @@ const Login = async (req, res) => {
 
         res.cookie("token", token, { httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 });
 
-        res.status(200).json({ success: true, message: "Login Successfully", existingUser, token });
+        res.status(200).json({ success: true, message: "Login Successfully", existingUser:{
+            id: existingUser.id,
+            email: existingUser.email,
+            role: existingUser.role
+        }});
     } catch (err) {
         console.log('Error in login process:', err);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -83,10 +87,16 @@ const CheckUser = async (req, res) => {
     try {
 
         const user = req.user;
+        // console.log("Received User: ", user);
         if(!user) {
             res.status(404).json({message: "User Not Found"});
         }
-        res.status(200).json(user);
+        res.status(200).json({
+            success: true,
+            message: 'User Authenticated',
+            user: req.user
+        });
+        console.log("Response: ",res.status(200).json(user))
 
     } catch (err) {
         res.status(500).json({message: "Internal Server Error"});

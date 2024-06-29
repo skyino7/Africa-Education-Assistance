@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Login = () => {
 
-    // const user = useSelector((state) => state.auth.user);  // Ensure this matches your state path
-    // console.log(user);
+    const user = useSelector((state) => state.Auth?.user);
+    console.log("Use Selector: ", user);
 
     const dispatch = useDispatch();
 
@@ -42,27 +42,47 @@ const Login = () => {
             }
 
             const data = await res.json();
-            console.log(data);
+            console.log("Logged In Details: ",data);
 
             if (data && data.data && data.data.user) {
                 console.log('Login Successful', data);
-                if (data.data.user.role === 'admin') {
-                    navigate('/admin');
-                } else if (data.data.user.role === 'user') {
-                    navigate('/user');
-                }
 
                 toast.success('Login Successful', {
                     position: 'top-center',
                 });
                 dispatch(setUser(data.data.user));
+
+                if (data.data.user.role === 'admin') {
+                    navigate('/admin');
+                } else if (data.data.user.role === 'user') {
+                    navigate('/user');
+                }
             } else {
                 console.log('Invalid response structure:', data);
                 throw new Error('Invalid response structure');
             }
 
+
+
+            // if (data && data.user) {
+            //     console.log('Login Successful', data);
+            //     if (data.user.role === 'admin') {
+            //         navigate('/admin');
+            //     } else if (data.user.role === 'user') {
+            //         navigate('/user');
+            //     }
+
+            //     toast.success('Login Successful', {
+            //         position: 'top-center',
+            //     });
+            //     dispatch(setUser(data.user));
+            // } else {
+            //     console.log('Invalid response structure:', data);
+            //     throw new Error('Invalid response structure');
+            // }
+
         } catch (error) {
-            console.error('Request error:', error);
+            console.log('Request error:', error);
             setError(error.message);
         }
     };

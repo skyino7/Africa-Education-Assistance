@@ -16,6 +16,8 @@ export const updateUser = createAsyncThunk('updateuser', async () => {
 
         const data = await response.json();
 
+        console.log('User data:', data);
+
         return data;
     } catch (error) {
         throw error;
@@ -29,7 +31,7 @@ const initialState = {
 };
 
 const AuthSlice = createSlice({
-    name: 'auth',
+    name: 'Auth',
     initialState: initialState,
     reducers: {
         setUser: (state, action) => {

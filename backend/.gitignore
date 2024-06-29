@@ -1,7 +1,5 @@
 /node_modules
 .env
 .env-local
-/controllers/Admin.js
-/routes/AdminRoutes.js
 test.js
 /controllers/test.js
