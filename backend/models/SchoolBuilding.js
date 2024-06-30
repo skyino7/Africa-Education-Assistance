@@ -17,7 +17,7 @@ const schoolBuildingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    state: {
+    region: {
         type: String,
         required: true
     },
@@ -36,10 +36,10 @@ const schoolBuildingSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    // image: {
-    //     type: File,
-    //     required: true
-    // },
+    image: {
+        type: String,
+        required: true
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
