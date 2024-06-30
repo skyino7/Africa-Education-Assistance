@@ -83,6 +83,36 @@ const Login = async (req, res) => {
     }
 }
 
+const Profile = async (req, res) => {
+    try {
+
+        const authHeader = req.headers['authorization'];
+        // console.log("Auth Header isUser: ", authHeader);
+        let token = authHeader && authHeader.split(' ')[1];
+
+        if (!token) {
+            token = req.cookies.token; // Get token from cookie if not in the header
+        }
+
+        if (!token) {
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.id;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({ username: user.username });
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+}
+
 const CheckUser = async (req, res) => {
 
     try {
@@ -118,4 +148,4 @@ const Logout = async (req, res) => {
 
 }
 
-module.exports = {Register, Login, CheckUser, Logout}
+module.exports = {Register, Login, Profile, CheckUser, Logout}

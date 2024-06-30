@@ -1,5 +1,5 @@
 const express = require('express');
-const { Register, Login, CheckUser, Logout } = require('../controllers/Auth');
+const { Register, Login, Profile, CheckUser, Logout } = require('../controllers/Auth');
 const { IsUser } = require('../middleware/verifyToken');
 
 const AuthRoutes = express.Router();
@@ -13,6 +13,7 @@ AuthRoutes.get('/CheckUser', IsUser, (req, res) => {
         user: req.user
     });
 });
+AuthRoutes.get('/profile', Profile);
 AuthRoutes.get('/logout', Logout);
 
 module.exports = AuthRoutes;

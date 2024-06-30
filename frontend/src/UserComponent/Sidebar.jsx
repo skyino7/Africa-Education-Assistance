@@ -1,8 +1,12 @@
 import React from 'react';
+import useProfile from '../useProfile.js';
 
 const Sidebar = () => {
+
+    const userName = useProfile();
+
   return (
-    <div className="bg-gray-800 text-white h-screen w-1/4 flex flex-col justify-between">
+    <div className="bg-gray-800 text-white h-screen w-1/8 flex flex-col justify-between">
       <div className="p-4">
         <h2 className="text-xl font-bold">Dashboard</h2>
         <ul className="mt-4">
@@ -12,7 +16,7 @@ const Sidebar = () => {
         </ul>
       </div>
       <div className="p-4">
-        <p className="text-xs">Logged in as User</p>
+        <p className="text-sm">Logged in as {userName}</p>
       </div>
     </div>
   );

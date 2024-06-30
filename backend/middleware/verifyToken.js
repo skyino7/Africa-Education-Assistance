@@ -63,7 +63,7 @@ const IsUser = async (req, res, next) => {
 
         if (!token) {
             token = req.cookies.token; // Get token from cookie if not in the header
-          }
+        }
 
         // console.log("Token isUser: ", token);
 
