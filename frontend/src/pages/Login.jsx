@@ -53,6 +53,8 @@ const Login = () => {
             if (data && data.existingUser) {
                 // console.log('Login Successful', data);
 
+                // localStorage.setItem('token', data.token);
+
                 toast.success('Login Successful', {
                     position: 'top-center',
                 });
@@ -81,10 +83,13 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if (user) {
-            navigate('/');
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Optionally validate token on the server-side for enhanced security
+            // Simulate auto-login for demonstration purposes
+            navigate('/user'); // Redirect to appropriate authenticated route
         }
-    }, [user, navigate]);
+    }, [navigate]);
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">

@@ -7,9 +7,6 @@ const createBookCampaign = async (req, res) => {
     const data = req.body;
     console.log("Data: ", data);
 
-    const data1 = req.params;
-    console.log("Data1: ", data1);
-
     const { name, quantity, description, received } = req.body;
     const picture = req.file ? req.file.path : null;
     console.log("Picture: ", picture);
@@ -41,20 +38,18 @@ const createBookCampaign = async (req, res) => {
     }
 };
 
-module.exports = createBookCampaign;
-
-
 const getBookCampaigns = async (req, res) => {
 
     try {
         const { page = 1, limit = 10 } = req.query;
         const bookCampaigns = await BookCampaign.find()
-        .populate('userId', 'firstName')
+        .populate('userId', 'firstname')
         .skip((page - 1) * limit)
         .limit(Number(limit))
         .exec();
 
         const total = await BookCampaign.countDocuments();
+
         res.status(200).json({
             success: true,
             data: bookCampaigns,
