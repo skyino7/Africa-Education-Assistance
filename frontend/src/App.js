@@ -12,6 +12,9 @@ import { useEffect } from 'react';
 import { updateUser } from './redux/AuthSlice';
 import UserLayouts from './layouts/UserLayouts';
 import AdminLayouts from './layouts/AdminLayouts';
+import BooksCampaign from './pages/BooksCampaign';
+import SchoolBuildingForm from './UserComponent/SchoolBuildingForm';
+import SchoolBuildingTable from './UserComponent/SchoolBuildingsTable';
 
 function App() {
 
@@ -31,10 +34,13 @@ function App() {
 
           <Route path='/user' element={<UserLayouts />}>
             <Route index element={<User />} />
+            <Route path="bookscampaign" element={<BooksCampaign />} />
+            <Route path="schoolbuildingform" element={<SchoolBuildingForm />} />
+            <Route path="schoolbuildingtable" element={<SchoolBuildingTable />} />
           </Route>
 
           <Route path='/admin' element={<AdminLayouts />}>
-            <Route index element={<Admin />} />
+            <Route index element={<Admin />} />``
           </Route>
 
           <Route path="/register" element={<Register />} />

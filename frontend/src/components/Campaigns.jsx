@@ -26,27 +26,37 @@ const Campaigns = () => {
     bookCampaigns(currentPage);
   }, [currentPage]);
 
+  const truncateText = (text, maxWords) => {
+    const words = text.split(' ');
+    return words.length > maxWords ? words.slice(0, maxWords).join(' ') + '...' : text;
+  };
+
   return (
     <>
-      <div className="flex flex-wrap -mx-4 p-5">
-      {/* <h1 className="p-4">Book Campaigns</h1> */}
-        {campaigns.map((campaign) => (
-          <div key={campaign._id} className="w-full md:w-1/2 lg:w-1/4 px-4 mb-8">
-            <div className="max-w-sm bg-white rounded-lg">
+      <div className="max-w-7xl mx-auto mt-10">
+      <h1 className="text-5xl font-bold mb-5">Book Campaigns</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {campaigns.map((campaign) => (
+            <div key={campaign._id} className="bg-white shadow-md rounded-lg overflow-hidden mb-6">
               <a href="/">
-                <img className="rounded-t-lg" src={`http://localhost:5000/${campaign.picture}`} alt={campaign.name} />
+                <img
+                  className="w-full h-48 object-cover"
+                  src={`http://localhost:5000/${campaign.picture}`}
+                  alt={campaign.name}
+                  loading="lazy"
+                />
               </a>
-              <div className="p-5 dark:bg-gray-800 dark:border-gray-700">
+              <div className="p-4">
                 <a href="/">
-                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-white dark:text-white">
+                  <h5 className="text-xl font-bold mb-2">
                     {campaign.name}
                   </h5>
                 </a>
-                <p className="mb-3 font-normal text-gray-700 dark:text-white">{campaign.description}</p>
-                <p className="mb-3 font-normal text-gray-700 dark:text-white">Target: {campaign.quantity}</p>
-                <span className='mb-3 font-normal text-white dark:text-white'>By: {campaign.userId.firstname}</span>
-                <br/>
-                <br/>
+                <p className="text-gray-700 mb-2">{truncateText(campaign.description, 50)}</p>
+                <p className="text-gray-700 mb-2">Target: {campaign.quantity}</p>
+                <span className="text-gray-700 mb-2">By: {campaign.userId.firstname}</span>
+                <br />
+                <br />
                 <a
                   href="/"
                   className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -70,8 +80,8 @@ const Campaigns = () => {
                 </a>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       {totalPages > 1 && (
         <div className="flex justify-center space-x-2 py-5">

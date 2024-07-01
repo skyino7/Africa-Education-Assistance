@@ -8,6 +8,7 @@ const BookCampaignRoutes = express.Router();
 const {
     createBookCampaign,
     getBookCampaigns,
+    nrBookCampaigns,
     getBookCampaignById,
     updateBookCampaign,
     deleteBookCampaign
@@ -16,6 +17,7 @@ const {
 
 BookCampaignRoutes.post('/create', IsUser, uploadMiddleware, createBookCampaign);
 BookCampaignRoutes.get('/getbookcampaigns', getBookCampaigns);
+BookCampaignRoutes.get('/nrbookcampaigns', nrBookCampaigns);
 BookCampaignRoutes.get('/getbookcampaigns/:id', getBookCampaignById);
 BookCampaignRoutes.put('/update/bookcampaigns/:id', verifyOwner, updateBookCampaign);
 BookCampaignRoutes.delete('/delete/bookcampaigns/:id', verifyOwner, deleteBookCampaign);

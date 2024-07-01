@@ -11,10 +11,11 @@ const {
 } = require('../controllers/SchoolBuildingController');
 const schoolOwner = require('../middleware/schoolOwner');
 const { IsUser } = require('../middleware/verifyToken');
+const uploadMiddleware = require('../middleware/upload');
 
 const SchoolBuildingRoutes = express.Router();
 
-SchoolBuildingRoutes.post('/create', IsUser, createSchoolBuilding);
+SchoolBuildingRoutes.post('/create', IsUser, uploadMiddleware, createSchoolBuilding);
 SchoolBuildingRoutes.get('/', getSchoolBuildings);
 SchoolBuildingRoutes.get('/:id', getSchoolBuildingById);
 SchoolBuildingRoutes.put('/update/:id', IsUser, schoolOwner, updateSchoolBuilding);
