@@ -42,6 +42,7 @@ const getBookCampaigns = async (req, res) => {
 
     try {
         const { page = 1, limit = 10 } = req.query;
+
         const bookCampaigns = await BookCampaign.find()
         .populate('userId', 'firstname')
         .skip((page - 1) * limit)
@@ -62,6 +63,30 @@ const getBookCampaigns = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error' })
     }
 }
+
+const nrBookCampaigns = async (req, res) => {
+    try {
+      const { page = 1, limit = 10 } = req.query;
+      const bookCampaigns = await BookCampaign.find({ received: false })
+        .populate('userId', 'firstname')
+        .skip((page - 1) * limit)
+        .limit(Number(limit))
+        .exec();
+
+      const total = await BookCampaign.countDocuments({ received: false });
+
+      res.status(200).json({
+        success: true,
+        data: bookCampaigns,
+        totalPages: Math.ceil(total / limit),
+        currentPage: Number(page),
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  };
+
 
 const getBookCampaignById = async (req, res) => {
 
@@ -142,6 +167,7 @@ const deleteBookCampaign = async (req, res) => {
 module.exports = {
     createBookCampaign,
     getBookCampaigns,
+    nrBookCampaigns,
     getBookCampaignById,
     updateBookCampaign,
     deleteBookCampaign

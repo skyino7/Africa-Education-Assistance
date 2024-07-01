@@ -24,7 +24,7 @@ const NavBar = () => {
     return (
         <nav className="bg-gray-800 text-white w-full fixed top-0 z-10">
             <div className="max-w-7xl mx-auto px-4">
-                <div className="flex justify-between items-center py-4">
+                <div className="flex items-center py-4">
                     {/* <a href="/home" className="text-white text-lg font-bold">Home</a> */}
                     <ul className="flex items-center space-x-4">
                         <li onClick={handleLogout} className="cursor-pointer">Logout</li>

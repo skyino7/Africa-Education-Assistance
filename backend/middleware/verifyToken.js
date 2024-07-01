@@ -9,7 +9,7 @@ const IsAdmin = async (req, res, next) => {
         // const token = req.cookies.token;
         // console.log(token);
 
-        const authHeader = req.headers.authorization;
+        const authHeader = req.headers['authorization'];
 
         // Check if Authorization header exists and starts with 'Bearer '
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -17,7 +17,11 @@ const IsAdmin = async (req, res, next) => {
         }
 
         // Extract token from header (remove 'Bearer ' prefix)
-        const token = authHeader.split(' ')[1];
+        let token = authHeader.split(' ')[1];
+
+        if (!token) {
+            token = req.cookies.token; // Get token from cookie if not in the header
+        }
 
         if (!token) {
             return res.status(401).json({ message: 'Unauthorized: No token provided' });
@@ -81,6 +85,9 @@ const IsUser = async (req, res, next) => {
         }
 
         if (user.role === 'user') {
+            req.user = user;
+            next();
+        } else if (user.role === 'admin') {
             req.user = user;
             next();
         } else {

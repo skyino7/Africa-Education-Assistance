@@ -1,19 +1,21 @@
 import React from 'react';
 // import BookCampaign from '../components/BookCampaign';
-import Sidebar from '../UserComponent/Sidebar';
+// import Sidebar from '../UserComponent/Sidebar';
 import Main from '../UserComponent/Main';
-import Navbar from '../UserComponent/Navbar';
+// import BooksCampaign from './BooksCampaign';
+// import Navbar from '../UserComponent/Navbar';
 
 const User = () => {
 
-
   return (
-    <div className='flex'>
+    <>
       {/* <Navbar /> */}
-      <Sidebar />
+      {/* {/* <Sidebar /> */}
       <Main />
-    </div>
+      {/* <BooksCampaign /> */}
+    </>
   )
+
 };
 
 export default User

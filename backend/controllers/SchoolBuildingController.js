@@ -5,24 +5,30 @@ require('dotenv').config();
 
 const createSchoolBuilding = async (req, res) => {
     try {
-        const { name, description, address, city, state, country, AmountNeeded } = req.body;
+        const { name, description, address, city, region, country, AmountNeeded } = req.body;
         const userId = req.user._id;
 
-        if (!name || !description || !address || !city || !state || !country || !AmountNeeded) {
+        if (!name || !description || !address || !city || !region || !country || !AmountNeeded) {
             return res.status(400).json({ message: 'Please fill all the required fields' });
         }
+
+        // const picture = req.file ? req.file.path : null;
 
         const schoolBuilding = new SchoolBuilding({
             name,
             description,
             address,
             city,
-            state,
+            region,
             country,
             AmountNeeded,
             AmountRaised: 0,
             userId
         });
+
+        if (req.file) {
+            schoolBuilding.image = req.file.path ? req.file.path : null;
+          }
 
         await schoolBuilding.save();
         res.status(201).json({ message: 'School building created successfully', schoolBuilding });
@@ -62,14 +68,14 @@ const getSchoolBuildingById = async (req, res) => {
 const updateSchoolBuilding = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, description, address, city, state, country, AmountNeeded, verified } = req.body;
+        const { name, description, address, city, region, country, AmountNeeded, verified } = req.body;
         const userId = req.user._id;
 
 
         const building = req.body;
         console.log("Building: ", building);
 
-        if (!name || !description || !address || !city || !state || !country || !AmountNeeded) {
+        if (!name || !description || !address || !city || !region || !country || !AmountNeeded) {
             return res.status(400).json({ message: 'Please fill all the required fields' });
         }
 
@@ -92,7 +98,7 @@ const updateSchoolBuilding = async (req, res) => {
         schoolBuilding.description = description;
         schoolBuilding.address = address;
         schoolBuilding.city = city;
-        schoolBuilding.state = state;
+        schoolBuilding.region = region;
         schoolBuilding.country = country;
         schoolBuilding.AmountNeeded = AmountNeeded;
         schoolBuilding.verified = verified;
